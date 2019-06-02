@@ -101,18 +101,16 @@ StartupOptions::StartupOptions(const string &product_name,
       macos_qos_class(QOS_CLASS_DEFAULT),
 #endif
       unlimit_coredumps(false) {
+  output_root = workspace_layout->GetOutputRoot();
   if (blaze::IsRunningWithinTest()) {
-    output_root = blaze_util::MakeAbsolute(blaze::GetPathEnv("TEST_TMPDIR"));
+    output_base = blaze_util::JoinPath(blaze_util::MakeAbsolute(blaze::GetPathEnv("TEST_TMPDIR")), "root");
     max_idle_secs = 15;
-    BAZEL_LOG(USER) << "$TEST_TMPDIR defined: output root default is '"
-                    << output_root << "' and max_idle_secs default is '"
+    BAZEL_LOG(USER) << "$TEST_TMPDIR defined: output base default is '"
+                    << output_base << "' and max_idle_secs default is '"
                     << max_idle_secs << "'.";
   } else {
-    output_root = workspace_layout->GetOutputRoot();
     max_idle_secs = 3 * 3600;
-    BAZEL_LOG(INFO) << "output root is '" << output_root
-                    << "' and max_idle_secs default is '" << max_idle_secs
-                    << "'.";
+    BAZEL_LOG(INFO) << "max_idle_secs default is '" << max_idle_secs << "'.";
   }
 
 #if defined(_WIN32) || defined(__CYGWIN__)

@@ -296,7 +296,7 @@ public class SandboxOptions extends OptionsBase {
 
   @Option(
       name = "experimental_sandbox_default_allow_network",
-      defaultValue = "true",
+      defaultValue = "false",
       documentationCategory = OptionDocumentationCategory.UNCATEGORIZED,
       effectTags = {OptionEffectTag.UNKNOWN},
       help = "Allow network access by default for actions.")

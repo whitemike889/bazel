@@ -274,9 +274,6 @@ function try_with_timeout() {
 
 function setup_bazelrc() {
   cat >$TEST_TMPDIR/bazelrc <<EOF
-# Set the user root properly for this test invocation.
-startup --output_user_root=${bazel_root}
-
 # Print all progress messages because we regularly grep the output in tests.
 common --show_progress_rate_limit=-1
 

@@ -492,7 +492,6 @@ sh_test(
     }),
     tags = [
         "no_windows",
-        "requires-network",
     ],
 )
 
