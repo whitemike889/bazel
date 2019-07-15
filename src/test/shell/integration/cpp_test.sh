@@ -150,7 +150,7 @@ EOF
 EOF
 
   bazel build -s //$pkg:a >& $TEST_log || fail "build failed"
-  expect_log "Compiling $pkg/a.cc"
+  expect_not_log "Compiling $pkg/a.cc"
   try_with_timeout bazel shutdown || fail "shutdown failed"
   bazel build -s //$pkg:a >& $TEST_log || fail "build failed"
   expect_not_log "Compiling $pkg/a.cc"

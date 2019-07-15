@@ -40,7 +40,7 @@ public class ApiVersionTest {
   @Test
   public void testCompareTo() throws Exception {
     assertThat(new ApiVersion(0, 0, 0, "v1test").compareTo(new ApiVersion(0, 0, 0, "v1test")))
-        .isEqualTo(0);
+        .isEqualTo(1);
     assertThat(new ApiVersion(0, 0, 0, "v1test").compareTo(new ApiVersion(0, 1, 0, "")))
         .isLessThan(0);
     assertThat(new ApiVersion(0, 0, 1, "").compareTo(new ApiVersion(1, 0, 0, "v1test")))

@@ -1056,7 +1056,7 @@ EOF
 
   expect_log "1 process: 1 remote cache hit"
 
-  [[ -f bazel-bin/a/foobar.txt ]] \
+  [[ -f bazel-bin/a/foobar2.txt ]] \
   || fail "Expected toplevel output bazel-bin/a/foobar.txt to be re-downloaded"
 
 
