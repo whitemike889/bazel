@@ -322,7 +322,7 @@ function link_dir() {
   local dest=$2
 
   if [[ "${PLATFORM}" == "windows" ]]; then
-    cmd.exe /C \"mklink /J \"$(cygpath -w "$dest")\" \"$(cygpath -w "$source")\"\"
+    cmd.exe /C "mklink /J $(cygpath -w "$dest") $(cygpath -w "$source")"
   else
     ln -s "${source}" "${dest}"
   fi
@@ -336,7 +336,7 @@ function link_file() {
     # Attempt creating a symlink to the file. This is supported without
     # elevation (Administrator privileges) on Windows 10 version 1709 when
     # Developer Mode is enabled.
-    if ! cmd.exe /C \"mklink \"$(cygpath -w "$dest")\" \"$(cygpath -w "$source")\"\"; then
+    if ! cmd.exe /C "mklink $(cygpath -w "$dest") $(cygpath -w "$source")"; then
       # If the previous call failed to create a symlink, just copy the file.
       cp "$source" "$dest"
     fi
