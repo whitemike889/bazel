@@ -104,6 +104,10 @@ msys*|mingw*|cygwin*)
   # Use a simplified platform string.
   PLATFORM="windows"
   PATHSEP=";"
+  # Prevent MSYS from messing with paths. This fixes an issue where "cmd.exe /C ..." get's turned into
+  # "cmd.exe C:/ ..." and causes the script to hang.
+  export MSYS_NO_PATHCONV=1
+  export MSYS2_ARG_CONV_EXCL="*"
   # Find the latest available version of the SDK.
   JAVA_HOME="${JAVA_HOME:-$(ls -d C:/Program\ Files/Java/jdk* | sort | tail -n 1)}"
   # Replace backslashes with forward slashes.
