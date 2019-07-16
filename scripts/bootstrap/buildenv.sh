@@ -104,10 +104,6 @@ msys*|mingw*|cygwin*)
   # Use a simplified platform string.
   PLATFORM="windows"
   PATHSEP=";"
-  # Prevent MSYS from messing with paths. This fixes an issue where "cmd.exe /C ..." get's turned into
-  # "cmd.exe C:/ ..." and causes the script to hang.
-  export MSYS_NO_PATHCONV=1
-  export MSYS2_ARG_CONV_EXCL="*"
   # Find the latest available version of the SDK.
   JAVA_HOME="${JAVA_HOME:-$(ls -d C:/Program\ Files/Java/jdk* | sort | tail -n 1)}"
   # Replace backslashes with forward slashes.
@@ -336,7 +332,7 @@ function link_file() {
     # Attempt creating a symlink to the file. This is supported without
     # elevation (Administrator privileges) on Windows 10 version 1709 when
     # Developer Mode is enabled.
-    if ! powershell -command "New-Item -ItemType Junction -Path '$(cygpath -w "$dest")' -Value '$(cygpath -w "$source")'"; then
+    if ! powershell -command "New-Item -ItemType SymbolicLink -Path '$(cygpath -w "$dest")' -Value '$(cygpath -w "$source")'"; then
       # If the previous call failed to create a symlink, just copy the file.
       cp "$source" "$dest"
     fi
