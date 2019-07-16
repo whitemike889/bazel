@@ -21,6 +21,7 @@
 # The resulting binary can be found at output/bazel.
 
 set -o errexit
+set -x
 
 cd "$(dirname "$0")"
 
