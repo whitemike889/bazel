@@ -32,7 +32,7 @@ tasks:
     include_json_profile:
       - build
       - test
-  debian-unstable:
+  debian10:
     shell_commands:
       - sed -i.bak -e 's/^# android_sdk_repository/android_sdk_repository/' -e 's/^#
         android_ndk_repository/android_ndk_repository/' WORKSPACE
