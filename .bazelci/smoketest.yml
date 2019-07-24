@@ -170,7 +170,7 @@ tasks:
       - "--"
       - "//src/test/java/com/google/devtools/build/lib:exec-tests"
       - "//src/test/shell/bazel:help_test"
-      - "//src/test/shell/bazel:cc_integration_test"
+      - "//src/test/shell/integration:cpp_test"
       - "//src/test/py/bazel:first_time_use_test"
     include_json_profile:
       - build
