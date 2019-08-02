@@ -400,7 +400,7 @@ public class FilesystemValueCheckerTest {
     assertThat(new FilesystemValueChecker(null, null).getDirtyActionValues(evaluator.getValues(),
         batchStatter, ModifiedFileSet.EVERYTHING_MODIFIED)).isEmpty();
 
-    FileSystemUtils.writeContentAsLatin1(out1.getPath(), "goodbye");
+    FileSystemUtils.writeContentAsLatin1(out1.getPath(), "hallo");
     assertThat(
             new FilesystemValueChecker(null, null)
                 .getDirtyActionValues(
