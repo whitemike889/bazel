@@ -39,6 +39,7 @@ import com.google.devtools.build.lib.actions.util.ActionsTestUtil;
 import com.google.devtools.build.lib.actions.util.TestAction;
 import com.google.devtools.build.lib.analysis.BlazeDirectories;
 import com.google.devtools.build.lib.analysis.ServerDirectories;
+import com.google.devtools.build.lib.clock.BlazeClock;
 import com.google.devtools.build.lib.cmdline.PackageIdentifier;
 import com.google.devtools.build.lib.events.NullEventHandler;
 import com.google.devtools.build.lib.packages.WorkspaceFileValue;
@@ -369,6 +370,8 @@ public class FilesystemValueCheckerTest {
     FileSystemUtils.writeContentAsLatin1(out1.getPath(), "hello");
     FileSystemUtils.writeContentAsLatin1(out2.getPath(), "fizzlepop");
 
+    TimestampGranularityMonitor tsgm = new TimestampGranularityMonitor(BlazeClock.instance());
+    tsgm.setCommandStartTime();
     ActionLookupKey actionLookupKey =
         new ActionLookupKey() {
           @Override
@@ -397,29 +400,31 @@ public class FilesystemValueCheckerTest {
             .setEventHander(NullEventHandler.INSTANCE)
             .build();
     assertThat(driver.evaluate(ImmutableList.<SkyKey>of(), evaluationContext).hasError()).isFalse();
-    assertThat(new FilesystemValueChecker(null, null).getDirtyActionValues(evaluator.getValues(),
+    assertThat(new FilesystemValueChecker(tsgm, null).getDirtyActionValues(evaluator.getValues(),
         batchStatter, ModifiedFileSet.EVERYTHING_MODIFIED)).isEmpty();
+    tsgm.waitForTimestampGranularity(OutErr.SYSTEM_OUT_ERR);
 
+    tsgm.setCommandStartTime();
     FileSystemUtils.writeContentAsLatin1(out1.getPath(), "hallo");
     assertThat(
-            new FilesystemValueChecker(null, null)
+            new FilesystemValueChecker(tsgm, null)
                 .getDirtyActionValues(
                     evaluator.getValues(), batchStatter, ModifiedFileSet.EVERYTHING_MODIFIED))
         .containsExactly(actionKey1);
     assertThat(
-            new FilesystemValueChecker(null, null)
+            new FilesystemValueChecker(tsgm, null)
                 .getDirtyActionValues(
                     evaluator.getValues(),
                     batchStatter,
                     new ModifiedFileSet.Builder().modify(out1.getExecPath()).build()))
         .containsExactly(actionKey1);
     assertThat(
-            new FilesystemValueChecker(null, null).getDirtyActionValues(evaluator.getValues(),
+            new FilesystemValueChecker(tsgm, null).getDirtyActionValues(evaluator.getValues(),
                 batchStatter,
                 new ModifiedFileSet.Builder().modify(
                     out1.getExecPath().getParentDirectory()).build())).isEmpty();
     assertThat(
-        new FilesystemValueChecker(null, null).getDirtyActionValues(evaluator.getValues(),
+        new FilesystemValueChecker(tsgm, null).getDirtyActionValues(evaluator.getValues(),
             batchStatter, ModifiedFileSet.NOTHING_MODIFIED)).isEmpty();
   }
 
