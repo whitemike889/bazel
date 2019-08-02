@@ -244,6 +244,12 @@ public class FilesystemValueChecker {
     return dirtyKeys;
   }
 
+  private boolean checkModification(Artifact f, FileArtifactValue n, FileArtifactValue o) {
+    boolean result = n.couldBeModifiedSince(o);
+    System.err.println("CM " + f.getExecPathString() + " " + o + " -> " + n + " == " + result);
+    return result;
+  }
+
   private Runnable batchStatJob(final Collection<SkyKey> dirtyKeys,
           final List<Pair<SkyKey, ActionExecutionValue>> shard,
           final BatchStat batchStatter, final ImmutableSet<PathFragment> knownModifiedOutputFiles,
@@ -309,7 +315,8 @@ public class FilesystemValueChecker {
           try {
             FileArtifactValue newData =
                 ActionMetadataHandler.fileArtifactValueFromArtifact(artifact, stat, tsgm);
-            if (newData.couldBeModifiedSince(lastKnownData)) {
+            boolean couldBeModified = checkModification(artifact, newData, lastKnownData);
+            if (couldBeModified) {
               updateIntraBuildModifiedCounter(stat != null ? stat.getLastChangeTime() : -1);
               modifiedOutputFilesCounter.getAndIncrement();
               dirtyKeys.add(key);
@@ -415,7 +422,8 @@ public class FilesystemValueChecker {
           boolean lastSeenRemotely = (fileValue != null) && fileValue.isRemote();
           boolean trustRemoteValue =
               fileMetadata.getType() == FileStateType.NONEXISTENT && lastSeenRemotely;
-          if (!trustRemoteValue && fileMetadata.couldBeModifiedSince(lastKnownData)) {
+          boolean couldBeModified = checkModification(file, fileMetadata, lastKnownData);
+          if (!trustRemoteValue && couldBeModified) {
             updateIntraBuildModifiedCounter(
                 fileMetadata.getType() != FileStateType.NONEXISTENT
                     ? file.getPath().getLastModifiedTime(Symlinks.FOLLOW)
