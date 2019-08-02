@@ -319,11 +319,13 @@ public class FilesystemValueChecker {
             if (couldBeModified) {
               updateIntraBuildModifiedCounter(stat != null ? stat.getLastChangeTime() : -1);
               modifiedOutputFilesCounter.getAndIncrement();
+              System.err.println("DIRTY3 " + artifact.getExecPathString());
               dirtyKeys.add(key);
             }
           } catch (IOException e) {
             // This is an unexpected failure getting a digest or symlink target.
             modifiedOutputFilesCounter.getAndIncrement();
+            System.err.println("DIRTY4 " + artifact.getExecPathString());
             dirtyKeys.add(key);
           }
         }
@@ -429,11 +431,13 @@ public class FilesystemValueChecker {
                     ? file.getPath().getLastModifiedTime(Symlinks.FOLLOW)
                     : -1);
             modifiedOutputFilesCounter.getAndIncrement();
+            System.err.println("DIRTY1 " + file.getExecPathString());
             isDirty = true;
           }
         } catch (IOException e) {
           // This is an unexpected failure getting a digest or symlink target.
           modifiedOutputFilesCounter.getAndIncrement();
+          System.err.println("DIRTY2 " + file.getExecPathString());
           isDirty = true;
         }
       }
