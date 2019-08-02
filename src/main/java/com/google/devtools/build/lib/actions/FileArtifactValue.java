@@ -490,7 +490,7 @@ public abstract class FileArtifactValue implements SkyValue, HasDigest {
       }
 
       RegularFileArtifactValue lastKnown = (RegularFileArtifactValue) o;
-      return !Objects.equals(proxy, lastKnown.proxy);
+      return size != lastKnown.size || !Objects.equals(proxy, lastKnown.proxy);
     }
   }
 
