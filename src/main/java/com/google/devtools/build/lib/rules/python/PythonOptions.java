@@ -246,7 +246,7 @@ public class PythonOptions extends FragmentOptions {
 
   @Option(
       name = "incompatible_load_python_rules_from_bzl",
-      defaultValue = "false",
+      defaultValue = "true",
       documentationCategory = OptionDocumentationCategory.UNDOCUMENTED,
       effectTags = {OptionEffectTag.LOADING_AND_ANALYSIS},
       metadataTags = {
